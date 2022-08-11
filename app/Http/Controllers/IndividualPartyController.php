@@ -8,6 +8,12 @@ use Yajra\DataTables\Facades\DataTables;
 class IndividualPartyController extends Controller
 {
     //
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function show($name)
     {
         $iparty = IndividualPartyModel::where('PartyName', "=", $name)->get();

@@ -1,29 +1,29 @@
 @extends('layouts.app')
 
 @section('content')
+
 <div class="container-fluid">
 
     <!-- Page Heading -->
-    <h1 class="h3 mb-2 text-gray-800">Raw Material</h1>
+    <h1 class="h3 mb-2 text-gray-800">INVENTORY</h1>
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Raw Matrial LIST</h6>
+            <h6 class="m-0 font-weight-bold text-primary">Item With Amount LIST</h6>
             <button style="float: right" id="CreateNewProduct" class="edit btn btn-info btn-sm">CREATE</button>
-            <a href="/catgorypage" style="float: right" id="CreateNewProduct" class="edit btn btn-info btn-sm">View Catgory</a>
         </div>
 
         <!-- TABLE SHOWING INFORMATION DIFFERNT CLIENT PARTY -->
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-bordered" id="ItemTable" width="100%" cellspacing="0">
+                <table class="table table-bordered" id="InventoryTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Name</th>
+                            <th>Item</th>
                             <th>Unit(per)</th>
-                            <th>Description</th>
-                            <th>Catgory</th>
+                            <th>Amount</th>
+                            <th>Date</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -32,8 +32,8 @@
                             <th>#</th>
                             <th>Name</th>
                             <th>Unit</th>
-                            <th>Description</th>
-                            <th>Catgory</th>
+                            <th>Amount</th>
+                            <th>Date</th>
                             <th>Action</th>
                         </tr>
                     </tfoot>
@@ -62,12 +62,16 @@
 
                                     <div class="form-group">
 
-                                        <label for="name" class="col-sm-2 control-label">Name</label>
+                                        <label for="Name" class="col-sm-2 control-label">Name</label>
 
                                         <div class="col-sm-12">
 
-                                            <input type="text" class="form-control" id="Name" name="name"
-                                                placeholder="Enter Name of party" value="" maxlength="50" required="">
+                                            <select  class="form-control" id="Name" name="name" onclick="CheckItem()"
+                                                placeholder="Enter Name of Item" value="" maxlength="50" required="">
+                                                @foreach ($data as $item)
+                                               <option>{{$item['ItemName']}}</option>
+                                                @endforeach
+                                            </select>
 
                                         </div>
 
@@ -79,43 +83,44 @@
 
                                         <div class="col-sm-12">
 
-                                            <input type="text" class="form-control" id="Unit" name="unit"
-                                                placeholder="Enter Unit" value="" maxlength="50" required="">
-
-                                        </div>
-
-                                    </div>
-
-                                    <div class="form-group">
-
-                                        <label for="Description" class="col-sm-4 control-label">Descripton</label>
-
-                                        <div class="col-sm-12">
-
-                                            <textarea class="form-control" id="Description" name="description"
-                                                placeholder="Enter Description" value="" >
-                                            </textarea>
-
-                                        </div>
-
-                                    </div>
-
-                                    <div class="form-group">
-
-                                        <label for="Catgory" class="col-sm-2 control-label">Catgory</label>
-
-                                        <div class="col-sm-12">
-
-                                            <select  class="form-control" id="Catgory" name="Catgory"
-                                                placeholder="Enter Description" value=""  >
-                                                @foreach ($catgory as $catgory)
-                                                    <option>{{$catgory['Name']}}</option>
+                                            <select class="form-control" id="Unit" name="unit"
+                                                placeholder="Enter Unit of item" value="" maxlength="50" required="">
+                                                @foreach ($Item as $item)
+                                               <option>{{$item['Unit']}}</option>
                                                 @endforeach
                                             </select>
 
                                         </div>
 
                                     </div>
+
+                                    <div class="form-group">
+
+                                        <label for="Amount" class="col-sm-2 control-label">Amount</label>
+
+                                        <div class="col-sm-12">
+
+                                            <input type="text" class="form-control" id="Amount" name="amount"
+                                                placeholder="Enter amoutnt of item" value="" maxlength="50" required="">
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="form-group">
+
+                                        <label for="Date" class="col-sm-2 control-label">Date</label>
+
+                                        <div class="col-sm-12">
+
+                                            <input type="text" class="form-control" id="Date" name="date"
+                                                placeholder="Enter Current Date" value="<?php echo date("Y-m-d") ?>"
+                                                maxlength="50" required="">
+
+                                        </div>
+
+                                    </div>
+
 
                                     <div class="col-sm-offset-2 col-sm-10">
 
@@ -145,24 +150,24 @@
                 @section('script')
                 <script>
                 $(document).ready(function() {
-                    $('#ItemTable').DataTable({
+                    $('#InventoryTable').DataTable({
                         processing: true,
                         serverSide: true,
-                        ajax: '/iteminfo',
+                        ajax: '/inventoryinfo',
                         columns: [{
                                 data: 'id'
                             },
                             {
-                                data: 'ItemName'
+                                data: 'Item'
                             },
                             {
                                 data: 'Unit'
                             },
                             {
-                                data: 'Description'
+                                data: 'Amount'
                             },
                             {
-                                data: 'Catgory'
+                                data: 'Date'
                             },
                             {
                                 data: 'action',
@@ -173,6 +178,13 @@
                         ],
                     });
                 });
+
+                function CheckItem() {
+                        let opt = $("#Name option:selected").val();
+                        $.get('/inventorygetinfo/' + opt, function(data) {
+                            $("#Unit").val(data['Unit']);
+                        });
+                    }
 
                 $('#CreateNewProduct').click(function() {
 
@@ -198,7 +210,7 @@
                         },
                         data: $('#productForm').serialize(),
 
-                        url: '/itemstore',
+                        url: '/inventorystore',
 
                         type: "POST",
 
@@ -211,7 +223,7 @@
                             $('#productForm').trigger("reset");
 
                             $('#ajaxModel').modal('hide');
-                            $('#ItemTable').DataTable().ajax.reload();
+                            $('#InventoryTable').DataTable().ajax.reload();
 
                         },
 
@@ -233,15 +245,15 @@
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
                         type: "DELETE",
-                        url: '/itemdelete/' + id,
+                        url: '/inventorydelete/' + id,
                         success: function(data) {
-                            $('#ItemTable').DataTable().ajax.reload();
+                            $('#InventoryTable').DataTable().ajax.reload();
                         },
                     });
                 }
 
                 function edit(id) {
-                    $.get('/itemedit/' + id, function(data) {
+                    $.get('/inventoryedit/' + id, function(data) {
                         console.log(data);
                         $('#modelHeading').html("Edit Product");
                         $('#saveBtn').val("edit-user");
@@ -249,9 +261,11 @@
                         $('#id').val(data.id);
                         $('#Name').val(data.ItemName);
                         $('#Unit').val(data.Unit);
-                        $('#Description').val(data.Description);
-                        $('#Catgory').val(data.Catgory)
+                        $('#Amount').val(data.Amount);
+                        $('#Date').val(data.Date)
                     });
+
+
                 }
                 </script>
                 @endsection

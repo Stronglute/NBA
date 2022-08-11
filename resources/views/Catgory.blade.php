@@ -4,26 +4,22 @@
 <div class="container-fluid">
 
     <!-- Page Heading -->
-    <h1 class="h3 mb-2 text-gray-800">Raw Material</h1>
+    <h1 class="h3 mb-2 text-gray-800">Catgory</h1>
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Raw Matrial LIST</h6>
+            <h6 class="m-0 font-weight-bold text-primary">Catgory LIST</h6>
             <button style="float: right" id="CreateNewProduct" class="edit btn btn-info btn-sm">CREATE</button>
-            <a href="/catgorypage" style="float: right" id="CreateNewProduct" class="edit btn btn-info btn-sm">View Catgory</a>
         </div>
 
         <!-- TABLE SHOWING INFORMATION DIFFERNT CLIENT PARTY -->
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-bordered" id="ItemTable" width="100%" cellspacing="0">
+                <table class="table table-bordered" id="Catgorytable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
                             <th>#</th>
                             <th>Name</th>
-                            <th>Unit(per)</th>
-                            <th>Description</th>
-                            <th>Catgory</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -31,9 +27,6 @@
                         <tr>
                             <th>#</th>
                             <th>Name</th>
-                            <th>Unit</th>
-                            <th>Description</th>
-                            <th>Catgory</th>
                             <th>Action</th>
                         </tr>
                     </tfoot>
@@ -67,51 +60,7 @@
                                         <div class="col-sm-12">
 
                                             <input type="text" class="form-control" id="Name" name="name"
-                                                placeholder="Enter Name of party" value="" maxlength="50" required="">
-
-                                        </div>
-
-                                    </div>
-
-                                    <div class="form-group">
-
-                                        <label for="Unit" class="col-sm-2 control-label">Unit</label>
-
-                                        <div class="col-sm-12">
-
-                                            <input type="text" class="form-control" id="Unit" name="unit"
-                                                placeholder="Enter Unit" value="" maxlength="50" required="">
-
-                                        </div>
-
-                                    </div>
-
-                                    <div class="form-group">
-
-                                        <label for="Description" class="col-sm-4 control-label">Descripton</label>
-
-                                        <div class="col-sm-12">
-
-                                            <textarea class="form-control" id="Description" name="description"
-                                                placeholder="Enter Description" value="" >
-                                            </textarea>
-
-                                        </div>
-
-                                    </div>
-
-                                    <div class="form-group">
-
-                                        <label for="Catgory" class="col-sm-2 control-label">Catgory</label>
-
-                                        <div class="col-sm-12">
-
-                                            <select  class="form-control" id="Catgory" name="Catgory"
-                                                placeholder="Enter Description" value=""  >
-                                                @foreach ($catgory as $catgory)
-                                                    <option>{{$catgory['Name']}}</option>
-                                                @endforeach
-                                            </select>
+                                                placeholder="Enter Catgory" value="" maxlength="50" required="">
 
                                         </div>
 
@@ -145,24 +94,15 @@
                 @section('script')
                 <script>
                 $(document).ready(function() {
-                    $('#ItemTable').DataTable({
+                    $('#Catgorytable').DataTable({
                         processing: true,
                         serverSide: true,
-                        ajax: '/iteminfo',
+                        ajax: '/catgoryinfo',
                         columns: [{
                                 data: 'id'
                             },
                             {
-                                data: 'ItemName'
-                            },
-                            {
-                                data: 'Unit'
-                            },
-                            {
-                                data: 'Description'
-                            },
-                            {
-                                data: 'Catgory'
+                                data: 'Name'
                             },
                             {
                                 data: 'action',
@@ -198,7 +138,7 @@
                         },
                         data: $('#productForm').serialize(),
 
-                        url: '/itemstore',
+                        url: '/catgorystore',
 
                         type: "POST",
 
@@ -211,7 +151,7 @@
                             $('#productForm').trigger("reset");
 
                             $('#ajaxModel').modal('hide');
-                            $('#ItemTable').DataTable().ajax.reload();
+                            $('#Catgorytable').DataTable().ajax.reload();
 
                         },
 
@@ -233,24 +173,21 @@
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
                         type: "DELETE",
-                        url: '/itemdelete/' + id,
+                        url: '/catgorydelete/' + id,
                         success: function(data) {
-                            $('#ItemTable').DataTable().ajax.reload();
+                            $('#Catgorytable').DataTable().ajax.reload();
                         },
                     });
                 }
 
                 function edit(id) {
-                    $.get('/itemedit/' + id, function(data) {
+                    $.get('/catgoryedit/' + id, function(data) {
                         console.log(data);
                         $('#modelHeading').html("Edit Product");
                         $('#saveBtn').val("edit-user");
                         $('#ajaxModel').modal('show');
                         $('#id').val(data.id);
-                        $('#Name').val(data.ItemName);
-                        $('#Unit').val(data.Unit);
-                        $('#Description').val(data.Description);
-                        $('#Catgory').val(data.Catgory)
+                        $('#Name').val(data.Name);
                     });
                 }
                 </script>

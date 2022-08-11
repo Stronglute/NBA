@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateItemsModelsTable extends Migration
+class CreateInventoryModelsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,12 @@ class CreateItemsModelsTable extends Migration
      */
     public function up()
     {
-        Schema::create('items', function (Blueprint $table) {
+        Schema::create('inventory', function (Blueprint $table) {
             $table->id();
-            $table->string('ItemName');
+            $table->string('Item');
             $table->string('Unit');
+            $table->string('Amount');
+            $table->Date('Date');
         });
     }
 
@@ -27,6 +29,6 @@ class CreateItemsModelsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('items');
+        Schema::dropIfExists('inventory');
     }
 }

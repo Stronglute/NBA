@@ -9,13 +9,27 @@ use Yajra\DataTables\Facades\DataTables;
 class VendorMainController extends Controller
 {
     //
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function show()
     {
         $vendor = VendorMainModel::all();
         return DataTables::of($vendor)
+
+            ->addColumn('contractimage', function ($row) {
+                if (empty($row->Contract)) {
+                    return '';
+                }
+                $url = asset("storage/app/image-docs/$row->Contract");
+                $img = '<img src="' . $url . '" border="0" width="40" class="img-rounded" align="center" >';
+                return $img;
+            })
             ->addColumn('action', function ($row) {
 
-                $btn = '<button  onclick="edit(' . $row->id . ')" class="edit btn btn-primary btn-sm">Edit</a>';
+                $btn = '<button  onclick="edit(' . $row->id . ')" class="edit btn btn-primary btn-sm">Edit</button>';
 
                 $btn = $btn . '<button  onclick="remove(' . $row->id . ')" class="edit btn btn-danger btn-sm">Delete</button>';
 
@@ -24,16 +38,30 @@ class VendorMainController extends Controller
                 return $btn;
 
             })
-
-            ->rawColumns(['action'])
+            ->rawColumns(['contractimage', 'action'])
             ->make(true);
+
     }
 
     public function store(Request $request)
     {
+        $imageName = $request->contract;
+        if ($request->contract != null) {
+            if ($request->id != null) {
+
+                $data = VendorMainModel::find($request->id);
+                $path = asset("storage/app/image-docs/$data->Contract");
+                if (file_exists($path)) {
+                    return unlink($path);
+                }
+            }
+
+            $imageName = time() . '.' . $request['contract']->getClientOriginalExtension();
+            $request['contract']->move('storage\app\image-docs', $imageName);
+        }
         VendorMainModel::updateOrCreate(['id' => $request->id],
 
-            ['VendorName' => $request->name, 'Balance' => $request->balance]);
+            ['VendorName' => $request->name, 'Address' => $request->address, 'Contact' => $request->contact, 'CNIC' => $request->cnic, 'Email' => $request->email, 'NTN' => $request->ntn, 'Contract' => $imageName]);
 
         return response()->json(['success' => 'Product saved successfully.']);
 

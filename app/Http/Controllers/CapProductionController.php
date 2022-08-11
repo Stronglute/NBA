@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CapOptionModel;
 use App\Models\CapProductionModel;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
@@ -9,6 +10,19 @@ use Yajra\DataTables\Facades\DataTables;
 class CapProductionController extends Controller
 {
     //
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    public function index()
+    {
+        $description = CapOptionModel::distinct()->get('Description')->filter();
+        $length = CapOptionModel::distinct()->get('Length')->filter();
+        $cap = CapOptionModel::distinct()->get('Cap')->filter();
+        $color = CapOptionModel::distinct()->get('Color')->filter();
+        return view('CapProduction')->with(['description' => $description, 'length' => $length, 'cap' => $cap, 'color' => $color]);
+    }
     public function show()
     {
         $capproduction = CapProductionModel::all();

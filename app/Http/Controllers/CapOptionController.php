@@ -9,6 +9,11 @@ use Yajra\DataTables\Facades\DataTables;
 class CapOptionController extends Controller
 {
     //
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function row($description)
     {
         return CapOptionModel::where('Description', "=", $description)->first();

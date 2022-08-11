@@ -16,9 +16,6 @@ session_start()
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -35,6 +32,13 @@ session_start()
 
     <!-- Custom styles for this template-->
     <link href=" {{ asset('css/sb-admin-2.min.css') }}" rel="stylesheet">
+
+    <style>
+    .error {
+        font-size: 1rem !important;
+        color: red;
+    }
+    </style>
 </head>
 
 <body id="page-top">
@@ -74,14 +78,9 @@ session_start()
                 <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Screens:</h6>
-                        <a class="collapse-item" href="/partylist">Parties info</a>
-                        <a class="collapse-item" href="/partymainpage">Party Main info</a>
-                        <a class="collapse-item" href="/cappage">CapProduction info</a>
-                        <a class="collapse-item" href="/vendormainpage">Vendor MaIn info</a>
-                        <a class="collapse-item" href="/itempage">Item info</a>
                         @if (auth()->user()->is_admin == 1)
-                           <a class="collapse-item" href="/Reg" >Register user</a>
-                       @endif
+                        <a class="collapse-item" href="/Reg">Register user</a>
+                        @endif
                     </div>
                 </div>
             </li>
@@ -91,9 +90,65 @@ session_start()
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
 
+            <!-- LINK PAGE -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages1"
+                    aria-expanded="true" aria-controls="collapsePages1">
+                    <i class="fas fa-fw fa-folder"></i>
+                    <span>Customer And Vendors</span>
+                </a>
+                <div id="collapsePages1" class="collapse" aria-labelledby="headingPages"
+                    data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Screens:</h6>
+                        <a class="collapse-item" href="/partymainpage">Customer info</a>
+                        <a class="collapse-item" href="/vendormainpage">Vendor info</a>
+                    </div>
+                </div>
+            </li>
 
+            <hr class="sidebar-divider d-none d-md-block">
 
+            <!-- LINK PAGE -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages2"
+                    aria-expanded="true" aria-controls="collapsePages2">
+                    <i class="fas fa-fw fa-folder"></i>
+                    <span>Product And Raw Material</span>
+                </a>
+                <div id="collapsePages2" class="collapse" aria-labelledby="headingPages"
+                    data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Screens:</h6>
+                        <a class="collapse-item" href="/productpage">Product info</a>
+                        <a class="collapse-item" href="/itempage">Raw Material info</a>
+                    </div>
+                </div>
+            </li>
+            <!-- Divider -->
+            <hr class="sidebar-divider d-none d-md-block">
 
+            <!-- LINK PAGE -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="/cappage">
+                    <i class="fas fa-fw fa-folder"></i>
+                    <span>CapProduction info</span>
+                </a>
+            </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider d-none d-md-block">
+
+            <!-- LINK PAGE -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="/inventorypage">
+                    <i class="fas fa-fw fa-folder"></i>
+                    <span>Inventory info</span>
+                </a>
+            </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider d-none d-md-block">
 
         </ul>
 
@@ -146,7 +201,8 @@ session_start()
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{auth()->user()->name}}</span>
+                                <span
+                                    class="mr-2 d-none d-lg-inline text-gray-600 small">{{auth()->user()->name}}</span>
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -174,10 +230,14 @@ session_start()
                 </nav>
                 @yield('content')
                 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.js"></script>
+
+                <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+
                 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
-                <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
-                <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
-                <script src="https://www.w3schools.com/lib/w3.js"></script>
+
+                <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
                 @yield('script')
 </body>
 

@@ -2,25 +2,42 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\PartiesModel;
+use App\Models\InventoryModel;
+use App\Models\ItemsModel;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
-class PartiesController extends Controller
+class InventoryController extends Controller
 {
     //
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index()
     {
-        $parties = PartiesModel::all();
-        return DataTables::of($parties)
+        $Item = ItemsModel::distinct()->get('Unit');
+        $data = ItemsModel::get('ItemName');
+        return view('Inventory', compact('Item', 'data'));
+    }
+
+    public function getinfo($name)
+    {
+        $item = ItemsModel::where('ItemName', '=', $name)->first();
+        return $item;
+    }
+
+    public function show()
+    {
+        $inventory = InventoryModel::all();
+        return DataTables::of($inventory)
             ->addColumn('action', function ($row) {
 
                 $btn = '<button  onclick="edit(' . $row->id . ')" class="edit btn btn-primary btn-sm">Edit</a>';
 
                 $btn = $btn . '<button  onclick="remove(' . $row->id . ')" class="edit btn btn-danger btn-sm">Delete</button>';
-
-                $btn = $btn . '<a href="/ipshowpage/' . $row->Name . '" class="edit btn btn-secondary btn-sm">View</a>';
-
                 return $btn;
 
             })
@@ -31,10 +48,9 @@ class PartiesController extends Controller
 
     public function store(Request $request)
     {
-        PartiesModel::updateOrCreate(['id' => $request->id],
+        InventoryModel::updateOrCreate(['id' => $request->id],
 
-            ['Name' => $request->name, 'Balance' => $request->balance, 'Billed' => $request->billed, 'Chq' => $request->chq, 'Received' => $request->received, 'Total' => $request->total,
-                'NetTotal' => $request->net_total]);
+            ['Item' => $request->name, 'Unit' => $request->unit, 'Amount' => $request->amount, 'Date' => $request->date]);
 
         return response()->json(['success' => 'Product saved successfully.']);
 
@@ -42,7 +58,7 @@ class PartiesController extends Controller
 
     public function edit($id)
     {
-        $product = PartiesModel::find($id);
+        $product = InventoryModel::find($id);
 
         return response()->json($product);
 
@@ -50,7 +66,7 @@ class PartiesController extends Controller
 
     public function destroy($id)
     {
-        $data = PartiesModel::find($id);
+        $data = InventoryModel::find($id);
         $data->delete();
         return response()->json(['success' => 'Product deleted successfully.']);
 

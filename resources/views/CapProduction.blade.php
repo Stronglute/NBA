@@ -85,15 +85,10 @@
                                                 <select class="form-control" id="Description"
                                                     onclick="checkDescription()" name="description"
                                                     placeholder="Enter Description of cap" value="" required="">
-                                                    <option value="Betawis. G">Betawis. G</option>
-                                                    <option value="Sample">Sample</option>
-                                                    <option value="Logel gel">Logel gel</option>
-                                                    <option value="Voltrex. Gel">Voltrex. Gel</option>
-                                                    <option value="Vagitrim">Vagitrim</option>
-                                                    <option value="Terb.C">Terb.C</option>
-                                                    <option value="Camrose Gel">Camrose Gel</option>
-                                                    <option value="Beta. C">Beta. C</option>
-                                                    <option value="Odimex">Odimex</option>
+                                                 @foreach ($description as $item)
+                                                 <option>{{$item['Description']}}</option>
+                                                 @endforeach
+
                                                 </select>
                                             </div>
 
@@ -108,15 +103,9 @@
                                                 <select class="form-control" id="Length" name="length"
                                                     onclick="checkLength()" placeholder="Enter Length OR Size" value=""
                                                     required="">
-                                                    <option value="19*110">19*110</option>
-                                                    <option value="25*148">25*148</option>
-                                                    <option value="19*110">19*110</option>
-                                                    <option value="19*120">19*120</option>
-                                                    <option value="22*140">22*140</option>
-                                                    <option value="19*100">19*100</option>
-                                                    <option value="22*125">22*125</option>
-                                                    <option value="19*115">19*115</option>
-                                                    <option value="22*130">22*130</option>
+                                                    @foreach ($length as $item)
+                                                 <option>{{$item['Length']}}</option>
+                                                 @endforeach
                                                 </select>
 
                                             </div>
@@ -132,9 +121,9 @@
                                                 <select class="form-control" id="Color" name="color"
                                                     onclick="checkColor()" placeholder="Enter Color of cap" value=""
                                                     required="">
-                                                    <option value="O2">O2</option>
-                                                    <option value="O4">O4</option>
-                                                    <option value="O3">O3</option>
+                                                    @foreach ($color as $item)
+                                                 <option>{{$item['Color']}}</option>
+                                                 @endforeach
                                                 </select>
 
                                             </div>
@@ -149,8 +138,9 @@
 
                                                 <select class="form-control" id="Cap" name="cap"
                                                     placeholder="Enter Cap about" required="">
-                                                    <option value="M9. Normal">M9. Normal</option>
-                                                    <option value="Full Shoulder">Full Shoulder</option>
+                                                    @foreach ($cap as $item)
+                                                 <option>{{$item['Cap']}}</option>
+                                                 @endforeach
                                                 </select>
                                             </div>
 
